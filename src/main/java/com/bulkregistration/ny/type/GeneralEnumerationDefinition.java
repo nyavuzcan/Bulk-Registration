@@ -2,7 +2,7 @@ package com.bulkregistration.ny.type;
 
 public class GeneralEnumerationDefinition {
   public enum SIM_TYPES {
-    PREPAID("PREPAID "),
+    PREPAID("PREPAID"),
     POSTPAID("POSTPAID");
 
 

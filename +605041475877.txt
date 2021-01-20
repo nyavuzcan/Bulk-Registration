@@ -1,0 +1,1 @@
+MemberDto{msisdn='+605041475877', simType='POSTPAID', name='VELI YUCE', dateOfBirth='20/05/1996', gender='M', address='AFYONASDASDSADASDSAASD', idNumber='EDv5564'}

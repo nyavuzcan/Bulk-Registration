@@ -10,13 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +21,7 @@ public class RegistrationValidationUtils {
   private final Logger LOGGER = LoggerFactory.getLogger(Utils.class.getName());
 
   @Autowired
-   MemberRepository memberRepository;
+  MemberRepository memberRepository;
 
   public boolean validateMemberFields(MemberDto memberDto) {
     if (checkFields(memberDto))
@@ -34,14 +29,15 @@ public class RegistrationValidationUtils {
         if (checkDateOfBirth(memberDto.getDateOfBirth()))
           if (checkGenderTypes(memberDto.getGender()))
             if (checkAddress(memberDto.getAddress()))
-              if (checkSimType(memberDto.getSimType()))
-                if (checkMsisdnNumberIsValid(memberDto.getMsisdn()))
-                  return checkMsisdnNumberIsUniq(memberDto.getMsisdn());
+              if (checkIdNumber(memberDto.getIdNumber()))
+                if (checkSimType(memberDto.getSimType()))
+                  if (checkMsisdnNumberIsValid(memberDto.getMsisdn()))
+                    return checkMsisdnNumberIsUniq(memberDto.getMsisdn());
 
     return false;
   }
 
-  public  boolean checkFields(MemberDto memberDto) {
+  public boolean checkFields(MemberDto memberDto) {
     boolean error = true;
     if (!(Objects.nonNull(memberDto.getMsisdn()) && memberDto.getMsisdn().length() > 0)) {
       LOGGER.error("MSISDN CANNOT BE NULL");
@@ -81,7 +77,7 @@ public class RegistrationValidationUtils {
     return error;
   }
 
-  public  boolean checkName(String memberName) {
+  public boolean checkName(String memberName) {
     Pattern patternName = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
     Matcher nameMatcher = patternName.matcher(memberName);
     boolean isThereSpecialChar = nameMatcher.find();
@@ -94,9 +90,9 @@ public class RegistrationValidationUtils {
     return true;
   }
 
-  public  boolean checkDateOfBirth(String memberDateOfBirth) {
+  public boolean checkDateOfBirth(String memberDateOfBirth) {
     try {
-      LocalDate localDateTime = LocalDate.now().minusDays(1);
+      LocalDate localDateTime = LocalDate.now();
 
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
       LocalDate localDate = LocalDate.parse(memberDateOfBirth, formatter);
@@ -112,9 +108,9 @@ public class RegistrationValidationUtils {
     return true;
   }
 
-  public  boolean checkGenderTypes(String memberGender) {
+  public boolean checkGenderTypes(String memberGender) {
     if (!memberGender.equals(GeneralEnumerationDefinition.GENDER_TYPES.F.getGenderTypeCode())
-       && !memberGender.equals(GeneralEnumerationDefinition.GENDER_TYPES.M.getGenderTypeCode())
+        && !memberGender.equals(GeneralEnumerationDefinition.GENDER_TYPES.M.getGenderTypeCode())
     ) {
       LOGGER.error("Gender can only be F or M");
       System.out.println("Gender can only be F or M");
@@ -123,7 +119,7 @@ public class RegistrationValidationUtils {
     return true;
   }
 
-  public  boolean checkAddress(String memberAddress) {
+  public boolean checkAddress(String memberAddress) {
     if (memberAddress.length() < 20) {
       LOGGER.error("Address must at least be 20 characters long");
       System.out.println("Address must at least be 20 characters long");
@@ -132,7 +128,16 @@ public class RegistrationValidationUtils {
     return true;
   }
 
-  public  boolean checkSimType(String simType) {
+  public boolean checkIdNumber(String memberIdNumber) {
+    if (memberIdNumber.matches("^[a-zA-Z]*$") ||memberIdNumber.matches("[0-9]+")) {
+      LOGGER.error("ID_NUMBER should be a mix of characters & numbers");
+      System.out.println("ID_NUMBER should be a mix of characters & numbers");
+      return false;
+    }
+    return true;
+  }
+
+  public boolean checkSimType(String simType) {
     if (!simType.equals(GeneralEnumerationDefinition.SIM_TYPES.POSTPAID.getSimTypeCode())
         && !simType.equals(GeneralEnumerationDefinition.SIM_TYPES.PREPAID.getSimTypeCode())
     ) {
@@ -143,7 +148,7 @@ public class RegistrationValidationUtils {
     return true;
   }
 
-  public  boolean checkMsisdnNumberIsValid(String memberMsisdn) {
+  public boolean checkMsisdnNumberIsValid(String memberMsisdn) {
     String regex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
     Pattern patternName = Pattern.compile(regex);
 
