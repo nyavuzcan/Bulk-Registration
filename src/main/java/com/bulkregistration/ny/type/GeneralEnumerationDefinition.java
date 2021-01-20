@@ -19,7 +19,7 @@ public class GeneralEnumerationDefinition {
 
   public enum  GENDER_TYPES {
     F("F"),
-    G("G");
+    M("M");
     private final String genderTypeCode;
 
     GENDER_TYPES(String genderTypeCode) {

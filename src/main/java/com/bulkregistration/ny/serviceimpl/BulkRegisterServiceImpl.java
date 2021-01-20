@@ -4,6 +4,8 @@ import com.bulkregistration.ny.entity.MemberEntity;
 import com.bulkregistration.ny.model.MemberDto;
 import com.bulkregistration.ny.repository.MemberRepository;
 import com.bulkregistration.ny.service.BulkRegisterService;
+import com.bulkregistration.ny.service.SmsService;
+import com.bulkregistration.ny.util.RegistrationValidationUtils;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +16,17 @@ import java.util.List;
 
 import static com.bulkregistration.ny.util.FileUtils.readCsvFile;
 import static com.bulkregistration.ny.util.FileUtils.writeMsisdnTXT;
-import static com.bulkregistration.ny.util.RegistrationValidationUtils.validateMemberFields;
+
 
 @Service
 public class BulkRegisterServiceImpl implements BulkRegisterService {
 
   @Autowired
   MemberRepository memberRepository;
+  @Autowired
+  RegistrationValidationUtils registrationValidationUtils;
+  @Autowired
+  SmsService smsService;
   @Autowired
   Mapper mapper;
 
@@ -30,11 +36,17 @@ public class BulkRegisterServiceImpl implements BulkRegisterService {
       List<MemberDto> members = readCsvFile();
 
       for (MemberDto memberDto : members) {
-        if (validateMemberFields(memberDto)) {
+        if (registrationValidationUtils.validateMemberFields(memberDto)) {
+
           MemberEntity memberEntity = mapper.map(memberDto, MemberEntity.class);
           memberRepository.save(memberEntity);
+
           writeMsisdnTXT(memberDto.toString(), memberDto.getMsisdn());
+
           System.out.println(memberDto.getMsisdn() + ".txt and to DB saved");
+
+          smsService.sendSmsForNews(memberDto.getMsisdn(), memberDto.getGender(), memberDto.getName());
+
         } else continue;
       }
 

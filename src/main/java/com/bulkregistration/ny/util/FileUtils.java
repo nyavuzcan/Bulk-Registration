@@ -5,10 +5,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class FileUtils {
@@ -31,9 +28,9 @@ public class FileUtils {
 
   public static boolean writeMsisdnTXT(String memberDtoString, String msisdn){
     try {
-      FileWriter myWriter = new FileWriter(memberDtoString+".txt");
-      myWriter.write(memberDtoString);
-      myWriter.close();
+      PrintWriter writer = new PrintWriter(msisdn+".txt", "UTF-8");
+      writer.println(memberDtoString);
+      writer.close();
       System.out.println("Successfully wrote to the file.");
     } catch (IOException e) {
       System.out.println("An error occurred.");
