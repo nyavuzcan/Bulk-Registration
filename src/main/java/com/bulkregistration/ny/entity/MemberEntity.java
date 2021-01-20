@@ -13,8 +13,7 @@ public class MemberEntity {
   private String msisdn;
   private String simType;
   private String name;
-  @JsonFormat(pattern="dd/MM/yyyy")
-  private Date dateOfBirth;
+  private String dateOfBirth;
   private String gender;
   private String address;
   private String idNumber;
@@ -55,11 +54,11 @@ public class MemberEntity {
   }
 
   @Column(name = "date_of_birth")
-  public Date getDateOfBirth() {
+  public String getDateOfBirth() {
     return dateOfBirth;
   }
 
-  public void setDateOfBirth(Date dateOfBirth) {
+  public void setDateOfBirth(String dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
   }
 

@@ -16,4 +16,18 @@ public class GeneralEnumerationDefinition {
       return simTypeCode;
     }
   }
+
+  public enum  GENDER_TYPES {
+    F("F"),
+    G("G");
+    private final String genderTypeCode;
+
+    GENDER_TYPES(String genderTypeCode) {
+      this.genderTypeCode = genderTypeCode;
+    }
+
+    public String getGenderTypeCode() {
+      return genderTypeCode;
+    }
+  }
 }
