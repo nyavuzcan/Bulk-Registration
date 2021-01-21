@@ -27,6 +27,10 @@ with','
  **Swagger:** http://localhost:8080/swagger-ui.html#
 
  **SpringBoot Api:** http://localhost:8080
+ 
+ **Process all project using CSV file:** localhost:8080/bulk/register  -GET METHOD
+ 
+ **Send sms for all Members with specific message:** localhost:8080/bulk/sms Request: {"message"}
 
 ## Used technologies
 **SpringBoot:** For api.
