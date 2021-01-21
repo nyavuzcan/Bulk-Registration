@@ -4,7 +4,6 @@ import com.bulkregistration.ny.entity.MemberEntity;
 import com.bulkregistration.ny.repository.MemberRepository;
 import com.bulkregistration.ny.service.SmsService;
 import com.bulkregistration.ny.type.GeneralEnumerationDefinition;
-import org.jcp.xml.dsig.internal.dom.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Service
 public class SmsServiceImpl implements SmsService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class.getName());
+  private static final Logger LOGGER = LoggerFactory.getLogger(SmsServiceImpl.class.getName());
   @Autowired
   MemberRepository memberRepository;
 
